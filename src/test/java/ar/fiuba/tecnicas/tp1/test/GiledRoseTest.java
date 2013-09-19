@@ -115,11 +115,11 @@ public class GiledRoseTest {
 	}
 
 	// Este test sirve para probar el refactor que vamos a hacer en la clase.
-	// @Test
-	// public void testConjuredQualtyDecrementsWithDoubleRate() {
-	// Item items[] = new Item[]{ new Item(CONJURED_ITEM, 10, 20) };
-	// this.advanceADayAndAssertQuality(18, items);
-	// }
+	@Test
+	public void testConjuredQualtyDecrementsWithDoubleRate() {
+		Item items[] = new Item[]{ new Item(Inventory.CONJURED_ITEM, 10, 20) };
+		this.advanceADayAndAssertQuality(18, items);
+	}
 
 	private void advanceADayAndAssertQuality(int expectedValue, Item items[]) {
 		Inventory inventory = new Inventory(items);
