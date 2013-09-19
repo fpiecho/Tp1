@@ -1,75 +1,50 @@
 package ar.fiuba.tecnicas.giledrose;
 
+import java.awt.List;
+import java.util.LinkedList;
+
 public class Inventory {
-    private Item[] items;
+	public static final String CONJURED_ITEM = "Conjured Mana Cake";
+	public static final String BACKSTAGE_ITEM = "Backstage passes to a TAFKAL80ETC concert";
+	public static final String SULFURAS_ITEM = "Sulfuras, Hand of Ragnaros";
+	public static final String AGED_BRIE_ITEM = "Aged Brie";
+	public static final String DEXTERITY_ITEM = "+5 Dexterity Vest";
+	public static final String ELIXIR_ITEM = "Elixir of the Mongoose";
+
+	
+    private LinkedList<ItemWrapper> itemwrappers;
 
     public Inventory(Item[] items) {
         super();
-        this.items = items;
+        this.itemwrappers = new LinkedList<ItemWrapper>();
+        for (int i = 0; i < items.length; i++) {
+        	if(items[i].getName() == CONJURED_ITEM || items[i].getName() == ELIXIR_ITEM || items[i].getName() == DEXTERITY_ITEM)
+        		itemwrappers.add(new OrdinaryItem(items[i]));
+        	else if (items[i].getName() == SULFURAS_ITEM )
+        		itemwrappers.add(new Sulfuras(items[i]));
+        	else if (items[i].getName() == BACKSTAGE_ITEM)
+        		itemwrappers.add(new BackstagePass(items[i]));
+        	else if (items[i].getName() == AGED_BRIE_ITEM)
+        		itemwrappers.add(new AgedBrie(items[i]));
+        }
+        
     }
 
     public Inventory() {
         super();
-        items = new Item[]{
-                new Item("+5 Dexterity Vest", 10, 20),
-                new Item("Aged Brie", 2, 0),
-                new Item("Elixir of the Mongoose", 5, 7),
-                new Item("Sulfuras, Hand of Ragnaros", 0, 80),
-                new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20),
-                new Item("Conjured Mana Cake", 3, 6)
-        };
+        itemwrappers = new LinkedList<ItemWrapper>();
+        itemwrappers.add(new OrdinaryItem(DEXTERITY_ITEM, 10, 20));
+        itemwrappers.add(new AgedBrie(2, 0));
+        itemwrappers.add(new OrdinaryItem(ELIXIR_ITEM, 5, 7));
+        itemwrappers.add(new Sulfuras(80));
+        itemwrappers.add(new BackstagePass(15, 20));
+        itemwrappers.add(new OrdinaryItem(CONJURED_ITEM, 3, 6));
 
     }
 
     public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-            if (items[i].getName() != "Aged Brie" && items[i].getName() != "Backstage passes to a TAFKAL80ETC concert") {
-                if (items[i].getQuality() > 0) {
-                    if (items[i].getName() != "Sulfuras, Hand of Ragnaros") {
-                        items[i].setQuality(items[i].getQuality() - 1);
-                    }
-                }
-            } else {
-                if (items[i].getQuality() < 50) {
-                    items[i].setQuality(items[i].getQuality() + 1);
-
-                    if (items[i].getName() == "Backstage passes to a TAFKAL80ETC concert") {
-                        if (items[i].getSellIn() < 11) {
-                            if (items[i].getQuality() < 50) {
-                                items[i].setQuality(items[i].getQuality() + 1);
-                            }
-                        }
-
-                        if (items[i].getSellIn() < 6) {
-                            if (items[i].getQuality() < 50) {
-                                items[i].setQuality(items[i].getQuality() + 1);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (items[i].getName() != "Sulfuras, Hand of Ragnaros") {
-                items[i].setSellIn(items[i].getSellIn() - 1);
-            }
-
-            if (items[i].getSellIn() < 0) {
-                if (items[i].getName() != "Aged Brie") {
-                    if (items[i].getName() != "Backstage passes to a TAFKAL80ETC concert") {
-                        if (items[i].getQuality() > 0) {
-                            if (items[i].getName() != "Sulfuras, Hand of Ragnaros") {
-                                items[i].setQuality(items[i].getQuality() - 1);
-                            }
-                        }
-                    } else {
-                        items[i].setQuality(items[i].getQuality() - items[i].getQuality());
-                    }
-                } else {
-                    if (items[i].getQuality() < 50) {
-                        items[i].setQuality(items[i].getQuality() + 1);
-                    }
-                }
-            }
+        for (int i = 0; i < itemwrappers.size(); i++) {
+        	itemwrappers.get(i).update();
         }
     }
 }

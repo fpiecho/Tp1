@@ -5,9 +5,15 @@ public class BackstagePass extends ItemWrapper{
 	public BackstagePass(int sellIn, int quality){
 		this.item = new Item("Backstage passes to a TAFKAL80ETC concert", quality, sellIn);	
 	}
+	
+	public BackstagePass(Item item)	{
+		this.item = item;
+	}
 
 	protected void updateSellin(){
 		this.item.setSellIn(this.item.getSellIn() -1);
+		if(this.item.getSellIn() <= 0)
+			this.item.setQuality(0);
 	}
 	
 	protected void updateQuality(){
@@ -15,9 +21,7 @@ public class BackstagePass extends ItemWrapper{
 			this.addToQuality(1);		
 		if(this.item.getSellIn() < 11)
 		{
-			if(this.item.getSellIn() <= 0)
-				this.item.setQuality(0);
-			else{
+			if(this.item.getSellIn() > 0){
 				this.addToQuality(1);
 				if(this.item.getSellIn() < 6)
 					this.addToQuality(1);
